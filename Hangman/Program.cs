@@ -1,8 +1,4 @@
-﻿using Hangman;
-using System;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿
 
 class Program
 {
