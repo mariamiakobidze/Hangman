@@ -8,7 +8,7 @@ class Program
 {
     static void Main()
     {
-        Game game = new Game();
+        HangmanGame game = new HangmanGame();
         game.Start();
 
       

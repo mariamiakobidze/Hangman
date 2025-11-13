@@ -2,10 +2,13 @@
 
 namespace Hangman
 {
-
-    class Game
+    abstract class Game     {
+        public abstract void Start();
+    }
+    class HangmanGame: Game
     {
-        public void Start()
+
+        public override void Start()
         {
             string filePath = GetFilePath("Data", "words.txt");
 
@@ -34,8 +37,7 @@ namespace Hangman
             while (triesLeft > 0 && !wordGuessed)
             {
                 DrawHangman(triesLeft);
-                Rules rules = new Rules();
-                rules.ShowRules();
+                ShowRules();
                 Console.WriteLine("\nWord: " + string.Join(" ", hiddenWord));
                 Console.WriteLine("Guessed letters: " + string.Join(" ", guessedLetters));
                 Console.WriteLine("Tries left: " + triesLeft);
@@ -169,6 +171,11 @@ namespace Hangman
             Console.Clear();
             Console.WriteLine(stages[stageIndex]);
             GetFilePath("Data", "words.txt");
+
+        }
+        public void ShowRules()
+        {
+            Console.WriteLine("Guess letters to find the word!");
 
         }
     }
