@@ -1,10 +1,11 @@
 ﻿
-
 namespace Hangman
 {
-    abstract class Game     {
+    abstract class Game    
+    {
         public abstract void Start();
     }
+
     class HangmanGame: Game
     {
 
@@ -14,7 +15,7 @@ namespace Hangman
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine("⚠️ File not found! Make sure 'words.txt' exists in the Data folder.");
+                Console.WriteLine("File not found!");
                 return;
             }
 
@@ -25,19 +26,23 @@ namespace Hangman
 
             char[] hiddenWord = new char[word.Length];
             for (int i = 0; i < word.Length; i++)
+            {
                 hiddenWord[i] = '_';
+            }
 
             List<char> guessedLetters = new List<char>();
             int triesLeft = 6;
             bool wordGuessed = false;
 
-            Console.WriteLine("🎯 Welcome to Hangman!");
+            Console.WriteLine("Welcome to Hangman!");
             Console.WriteLine("----------------------");
+            ShowRules();
+            Console.WriteLine("Press enter to start:");
+            Console.ReadKey();
 
             while (triesLeft > 0 && !wordGuessed)
             {
                 DrawHangman(triesLeft);
-                ShowRules();
                 Console.WriteLine("\nWord: " + string.Join(" ", hiddenWord));
                 Console.WriteLine("Guessed letters: " + string.Join(" ", guessedLetters));
                 Console.WriteLine("Tries left: " + triesLeft);
@@ -47,7 +52,7 @@ namespace Hangman
 
                 if (string.IsNullOrEmpty(input) || input.Length != 1 || !char.IsLetter(input[0]))
                 {
-                    Console.WriteLine("⚠️ Please enter a single valid letter!");
+                    Console.WriteLine("please enter a single valid letter!");
                     Thread.Sleep(1000);
                     continue;
                 }
@@ -56,7 +61,7 @@ namespace Hangman
 
                 if (guessedLetters.Contains(guess))
                 {
-                    Console.WriteLine("⚠️ You already guessed that letter!");
+                    Console.WriteLine("you already guessed that letter!");
                     Thread.Sleep(1000);
                     continue;
                 }
@@ -65,19 +70,21 @@ namespace Hangman
 
                 if (word.Contains(guess))
                 {
-                    Console.WriteLine("✅ Good guess!");
+                    Console.WriteLine("good guess!");
 
                     for (int i = 0; i < word.Length; i++)
                     {
                         if (word[i] == guess)
+                        {
                             hiddenWord[i] = guess;
+                        }
                     }
 
                     wordGuessed = !Array.Exists(hiddenWord, c => c == '_');
                 }
                 else
                 {
-                    Console.WriteLine("❌ Wrong guess!");
+                    Console.WriteLine("wrong guess!");
                     triesLeft--;
                 }
 
@@ -88,23 +95,23 @@ namespace Hangman
 
             Console.WriteLine("\nWord: " + string.Join(" ", hiddenWord));
             if (wordGuessed)
-                Console.WriteLine($"\n🎉 You won! The word was: {word}");
+                Console.WriteLine($"\n You won! The word was: {word}");
             else
-                Console.WriteLine($"\n💀 Game Over! The word was: {word}");
+                Console.WriteLine($"\n Game Over! The word was: {word}");
         }
 
         private static string GetFilePath(string folderName, string fileName)
         {
-            string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName ?? string.Empty;
+            string workingDirector = Environment.CurrentDirectory;
+            string projectDirector = Directory.GetParent(workingDirector)?.Parent?.Parent?.FullName ?? string.Empty;
 
-            string filePath = Path.Combine(projectDirectory, folderName, fileName);
+            string filePath = Path.Combine(projectDirector, folderName, fileName);
             return filePath;
         }
 
         private void DrawHangman(int triesLeft)
         {
-            string[] stages =
+            string[] steps =
             {
 @"
   +---+
@@ -164,18 +171,19 @@ namespace Hangman
 ========="
         };
 
-            int stageIndex = 6 - triesLeft;
-            if (stageIndex < 0) stageIndex = 0;
-            if (stageIndex > 6) stageIndex = 6;
+            int stepIndex = 6 - triesLeft;
+            if (stepIndex < 0) stepIndex = 0;
+            if (stepIndex > 6) stepIndex = 6;
 
             Console.Clear();
-            Console.WriteLine(stages[stageIndex]);
+            Console.WriteLine(steps[stepIndex]);
             GetFilePath("Data", "words.txt");
 
         }
         public void ShowRules()
         {
             Console.WriteLine("Guess letters to find the word!");
+            Console.WriteLine("You have 6 tries before the hangman is complete.");
 
         }
     }
